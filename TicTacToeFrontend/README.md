@@ -1,82 +1,157 @@
-# Lightweight React Template for KAVIA
+# Tic Tac Toe React App
 
-This project provides a minimal React template with a clean, modern UI and minimal dependencies.
+This project is a modern, minimalistic Tic Tac Toe game implemented entirely in React. It supports both two-player local mode and a single-player mode against a basic AI opponent. The app is fully client-side, requires no backend, and emphasizes accessibility, responsiveness, and testability.
 
 ## Features
 
-- **Lightweight**: No heavy UI frameworks - uses only vanilla CSS and React
-- **Modern UI**: Clean, responsive design with KAVIA brand styling
-- **Fast**: Minimal dependencies for quick loading times
-- **Simple**: Easy to understand and modify
+- Single-player (vs AI) and two-player local modes
+- Real-time board updates with clear turn indication
+- Valid move enforcement with immediate feedback for invalid actions
+- Win and draw detection, with winning line highlight
+- Keyboard navigation (arrow keys) and Space/Enter to place marks
+- ARIA roles/labels and polite live regions for screen readers
+- Light/Dark theme toggle
+- Responsive layout with mobile-friendly touch targets
+- Comprehensive unit tests with Jest and React Testing Library
+- Simple, self-contained React application with minimal dependencies
 
-## Getting Started
+## Project Structure
 
-In the project directory, you can run:
+- src/components
+  - Game.js: Game container with mode selection, status, and controls
+  - Board.js: Grid layout and keyboard navigation between squares
+  - Square.js: Accessible square button with focus and ARIA support
+- src/hooks
+  - useTicTacToe.js: Core game state, rules enforcement, AI scheduling
+- src/utils
+  - gameRules.js: Winner detection, draw logic, available moves
+  - ai.js: Heuristic AI for single-player mode
+- src/App.js / src/App.css: App container, theme toggle, styling
+- src/__tests__ and src/App.test.js: Unit and UI tests (Jest/RTL)
 
-### `npm start`
+## Setup
 
-Runs the app in development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Prerequisites:
+- Node.js 16+ and npm 8+ recommended
 
-### `npm test`
+Install dependencies:
+- npm install
 
-Launches the test runner in interactive watch mode.
+Start development server:
+- npm start
+- Open http://localhost:3000 in your browser
 
-### `npm run build`
+Build for production:
+- npm run build
+- Outputs to build/ with optimized assets
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Run tests (Jest + React Testing Library):
+- npm test
+- Runs unit and component tests in watch mode
 
-## Customization
+CI-friendly test run:
+- CI=true npm test
 
-### Colors
+## How to Play
 
-The main brand colors are defined as CSS variables in `src/App.css`:
+- Choose game mode from the Mode selector:
+  - Single Player (vs AI): You are X, AI is O. AI moves automatically after your turn.
+  - Two Players: X and O alternate on the same device.
+- Click or tap an empty square to place your mark.
+- Use the keyboard:
+  - Arrow keys to move focus between squares.
+  - Space or Enter to place a mark.
+- Invalid moves are prevented:
+  - If you click an occupied square or try to play after the game ends, the app shows a brief shake animation and an explanatory message.
+- Click “New Game” to reset at any time.
 
-```css
-:root {
-  --kavia-orange: #E87A41;
-  --kavia-dark: #1A1A1A;
-  --text-color: #ffffff;
-  --text-secondary: rgba(255, 255, 255, 0.7);
-  --border-color: rgba(255, 255, 255, 0.1);
-}
-```
+## Testing
 
-### Components
+This project ships with unit and UI tests using Jest and React Testing Library (RTL). Tests cover:
+- Game rules (win/draw detection, available moves)
+- AI move selection heuristics
+- Hook behavior (turn switching, invalid moves, AI scheduling)
+- UI interactions (clicks, keyboard navigation, aria-live updates, reset)
 
-This template uses pure HTML/CSS components instead of a UI framework. You can find component styles in `src/App.css`. 
+Local test commands:
+- npm test
+- CI=true npm test  (non-interactive)
 
-Common components include:
-- Buttons (`.btn`, `.btn-large`)
-- Container (`.container`)
-- Navigation (`.navbar`)
-- Typography (`.title`, `.subtitle`, `.description`)
+Test locations:
+- src/__tests__/gameRules.test.js
+- src/__tests__/ai.test.js
+- src/__tests__/useTicTacToe.test.js
+- src/App.test.js
 
-## Learn More
+Optional: Cypress E2E tests
+- Cypress is not installed by default. To add end-to-end tests:
+  1) npm install --save-dev cypress
+  2) npx cypress open (for interactive UI) or npx cypress run (CI mode)
+  3) Create tests under cypress/e2e, for example:
+     - Validate initial render (title, mode selector, reset button, board)
+     - Simulate two-player game to a win and verify winning highlights
+     - Single-player flow, verify AI makes a move
+     - Keyboard navigation: arrow keys and Enter/Space to place mark
+  4) For CI, prefer: npx cypress run --browser chrome
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Note: Keep Cypress tests focused on end-to-end user journeys and leverage data-testid attributes already present in components.
 
-### Code Splitting
+## Accessibility
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+- Keyboard Support:
+  - Arrow keys navigate between grid cells (Board.js manages focus)
+  - Enter/Space activate the focused cell (Square.js handles keypress)
+- Roles and ARIA:
+  - Board: role="grid", aria-label="Tic Tac Toe board"
+  - Square: role="gridcell", descriptive aria-labels per cell state
+  - Status: aria-live="polite" for turn changes, wins, and draws
+  - Alerts: invalid action messages use role="alert"
+- Focus Indicators:
+  - Visible focus outline for keyboard users (:focus-visible styling)
+- Color Contrast:
+  - Light/dark themes with sufficient contrast variables
+- Touch Targets:
+  - Large square buttons to support mobile and touch users
 
-### Analyzing the Bundle Size
+## Responsiveness
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+- Grid-based board with CSS variables for square sizing
+- Mobile breakpoint reduces square size for smaller screens
+- Controls wrap and remain accessible on narrow viewports
+- Touch-action and user-select settings improve mobile UX
 
-### Making a Progressive Web App
+## Deployment
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+This app is a standard Create React App build:
+- npm run build
+- The production build is generated in the build/ directory.
 
-### Advanced Configuration
+Static hosting options:
+- GitHub Pages: Serve the build directory via gh-pages or a static site action
+- Netlify/Vercel: Drag-and-drop the build folder or connect the repo for auto-deploy
+- Any static server: Serve the build directory root as a static site
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+Example: Serve locally with a simple static server
+- npm install --global serve
+- serve -s build
 
-### Deployment
+Ensure client-side routing isn’t required (this app uses no routing), so any static hosting will work without special rewrites.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+## Known Behaviors and Notes
 
-### `npm run build` fails to minify
+- AI thinks briefly before moving to simulate a more natural pace.
+- Switching modes resets the game to maintain a deterministic and simple UX.
+- Attempting actions while the AI is “thinking” will show a friendly message and not register a move.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Troubleshooting
+
+- Port already in use:
+  - Your dev server may already be running at http://localhost:3000.
+- Test hangs in CI:
+  - Use CI=true npm test for non-interactive test runs.
+- Build issues:
+  - Delete node_modules and reinstall: rm -rf node_modules && npm install
+
+## License
+
+This project is provided as part of an internal exercise/demo. Use and modify as needed within your organization.
